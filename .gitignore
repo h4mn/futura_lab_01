@@ -67,3 +67,7 @@ __recovery/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+
+# Delphi executables (user-specific info)
+futura_lab_01/bin/
+futura_lab_01/lib/
