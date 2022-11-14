@@ -34,8 +34,25 @@ type
     property ShapeColor: TColor read FShapeColor write SetShapeColor;
   end;
 
+  TMyLabel = class(TPanel)
+  private
+    FDescription        : TLabel;
+    FValue              : TLabel;
+    FShape              : TShape;
+    FShapeColor         : TColor;
+    FDescriptionCaption : TCaption;
+    FValueCaption       : TCaption;
+    procedure SetShapeColor(const Value: TColor);
+    procedure SetDescriptionCaption(const Value: TCaption);
+    procedure SetValueCaption(const Value: TCaption);
+  public
+    constructor Create(AOwner: TComponent); override;
+    property BackgroundColor: TColor read FShapeColor write SetShapeColor;
+    property Caption: TCaption read FDescriptionCaption write SetDescriptionCaption;
+    property Value: TCaption read FValueCaption write SetValueCaption;
+  end;
+
   TMain = class(TForm)
-    Shape1: TShape;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -58,10 +75,20 @@ type
     FH1             : TFont;
     FTitle          : TPanel;
     FValues         : TPanel;
+    FVlTotal        : TMyLabel;
+
+    procedure CustomerSelect;
+    procedure ProductFind;
+    procedure ItemCancel;
+    procedure OrderCancel;
+    procedure Payment;
+    procedure Devolution;
+    procedure Others;
   public
     { Public declarations }
     PanelsCreated: integer;
     ButtonsCreated: integer;
+    LabelsCreated: integer;
   end;
 
 var
@@ -106,11 +133,11 @@ begin
       FTitle := TMyPanel.Create(FContainer);
       with FTitle do
       begin
-        Align := alTop;
+        Name := 'pnlTitle';
         Caption := 'Caixa Aberto';
+        Align := alTop;
         Color := clHighlight;
         Height := 60;
-        Name := 'pnlTitle';
         Parent := FContainer;
         Font := FH1;
       end;
@@ -122,6 +149,7 @@ begin
         Right := 5;
         Top := 10;
       end;
+      {$region 'buttons'}
       FButtons := TMyPanel.Create(FContainer);
       with FButtons do
       begin
@@ -133,30 +161,7 @@ begin
         Padding := FButtonsPadding;
         Parent := FContainer;
       end;
-      FClient := TMyPanel.Create(FContainer);
-      with FClient do
-      begin
-        Name := 'pnlClient';
-        Parent := FContainer;
-      end;
-      FValues := TMyPanel.Create(FClient);
-      with FValues do
-      begin
-        Align := alRight;
-        Width := 400;
-        Caption := 'Valor';
-        Color := clGradientInactiveCaption;
-        Name := 'pnlValor';
-        Parent := FClient;
-      end;
-      FGrid := TMyPanel.Create(FClient);
-      with FGrid do
-      begin
-        Caption := 'Grid';
-        Color := clWindow;
-        Name := 'pnlGrid';
-        Parent := FClient;
-      end;
+
       FBtnCustomer := TMyButton.Create(FButtons);
       with FBtnCustomer do
       begin
@@ -213,7 +218,47 @@ begin
         ButtonOnClick := Main.PanelClick;
         Parent := FButtons;
       end;
-
+      {$endregion}
+      FClient := TMyPanel.Create(FContainer);
+      with FClient do
+      begin
+        Name := 'pnlClient';
+        Parent := FContainer;
+      end;
+      {$region 'values'}
+      FValues := TMyPanel.Create(FClient);
+      with FValues do
+      begin
+        Align   := alRight;
+        Width   := 400;
+        Caption := 'Valor';
+        Color   := clGradientInactiveCaption;
+        Name    := 'pnlValor';
+        Parent  := FClient;
+      end;
+      FVlTotal := TMyLabel.Create(FValues);
+      with FVlTotal do
+      begin
+        Name            := 'pnlTotal';
+        Caption         := 'Total';
+        Value           := '61,90';
+        { TODO -oHads -cMelhorar: Nome e comportamento das propriedades de cores }
+        Color           := clGradientInactiveCaption;
+        BackgroundColor := clHighlight;
+        Height          := 100;
+        Parent          := FValues;
+      end;
+      {$endregion}
+      {$region 'grid'}
+      FGrid := TMyPanel.Create(FClient);
+      with FGrid do
+      begin
+        Caption := 'Grid';
+        Color := clWindow;
+        Name := 'pnlGrid';
+        Parent := FClient;
+      end;
+      {$endregion}
 
     except
       on E: Exception do
@@ -223,8 +268,7 @@ begin
 end;
 
 procedure TMain.FormDestroy(Sender: TObject);
-var
-  i: Integer;
+//var i: Integer;
 begin
   { TODO -oHads -cNao_Esquecer: Melhorar laço para liberar todos componentes criados }
 //  for i := 0 to Self.ComponentCount - 1 do
@@ -235,16 +279,59 @@ begin
     FreeAndNil(FH1);
 end;
 
+{$region 'Atalhos'}
 procedure TMain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   case Key of
-    vkEscape:
-      Application.Terminate;
+    vkEscape : Application.Terminate;
+    vkF1     : CustomerSelect;
+    vkF2     : ProductFind;
+    vkF4     : Payment;
+    vkF6     : ItemCancel;
+    vkF7     : OrderCancel;
+    vkF8     : Devolution;
+    vkF12    : Others;
   end;
+
 end;
 
-{ TMyPanel }
+procedure TMain.CustomerSelect;
+begin
+  ShowMessage(Format('%s - %s', [Self.ClassName, 'CustomerSelect']));
+end;
 
+procedure TMain.ProductFind;
+begin
+  //
+end;
+
+procedure TMain.Payment;
+begin
+  //
+end;
+
+procedure TMain.ItemCancel;
+begin
+  //
+end;
+
+procedure TMain.OrderCancel;
+begin
+  //
+end;
+
+procedure TMain.Devolution;
+begin
+  //
+end;
+
+procedure TMain.Others;
+begin
+  //
+end;
+{$endregion}
+
+{$region 'TMyPanel'}
 constructor TMyPanel.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -261,9 +348,9 @@ begin
     ParentBackground := false;
   end;
 end;
+{$endregion}
 
-{ TMyButton }
-
+{$region 'TMyButton'}
 constructor TMyButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -319,5 +406,101 @@ procedure TMyButton.SetShapeColor(const Value: TColor);
 begin
   FShape.Brush.Color := Value;
 end;
+{$endregion}
+
+{$region 'TMyLabel'}
+constructor TMyLabel.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  inc(Main.LabelsCreated);
+  with Self do
+  begin
+    Align            := TAlign.alBottom;
+    BevelOuter       := TBevelCut.bvNone;
+    Caption          := '';
+    Color            := clDefault;
+    with Padding do
+    begin
+      Left   := 10;
+      Right  := 10;
+      Bottom := 5;
+      Top    := 5;
+    end;
+    Parent           := Main;
+    ParentBackground := false;
+
+    FDescription := TLabel.Create(Self);
+    with FDescription do
+    begin
+      Align       := alTop;
+      AutoSize    := false;
+      Color       := clCream;
+      with Font do
+      begin
+        Name := 'Roboto';
+        Size := 12;
+      end;
+      Height      := 30;
+      Layout      := TTextLayout.tlCenter;
+      Name        := Format('MyLblDescription_%d', [Main.LabelsCreated]);
+      Parent      := Self;
+    end;
+
+    FShape := TShape.Create(Self);
+    with FShape do
+    begin
+      Align       := alClient;
+      Brush.Color := FShapeColor;
+      Shape       := stRoundRect;
+      Pen.Style   := psClear;
+      Parent      := Self;
+    end;
+
+    FValue := TLabel.Create(Self);
+    with FValue do
+    begin
+      Align            := alClient;
+      Alignment        := TAlignment.taCenter;
+      AlignWithMargins := true;
+      AutoSize         := false;
+      with Font do
+      begin
+        Name  := 'Roboto';
+        Size  := 20;
+        Color := clWhite;
+      end;
+      Layout      := TTextLayout.tlCenter;
+      Name        := Format('MyLblValue_%d', [Main.LabelsCreated]);
+      with Margins do
+      begin
+        Left   := 5;
+        Right  := 5;
+        Bottom := 3;
+        Top    := 3;
+      end;
+      Parent := Self;
+    end;
+  end;
+
+end;
+
+procedure TMyLabel.SetDescriptionCaption(const Value: TCaption);
+begin
+  FDescriptionCaption := Value;
+  FDescription.Caption := Value;
+end;
+
+procedure TMyLabel.SetValueCaption(const Value: TCaption);
+begin
+  FValueCaption := Value;
+  FValue.Caption := Value;
+end;
+
+procedure TMyLabel.SetShapeColor(const Value: TColor);
+begin
+  FShape.Brush.Color := Value;
+end;
+
+{$endregion}
 
 end.

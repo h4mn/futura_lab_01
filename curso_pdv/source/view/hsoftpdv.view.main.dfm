@@ -16,11 +16,4 @@ object Main: TMain
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
-  object Shape1: TShape
-    Left = 136
-    Top = 184
-    Width = 65
-    Height = 65
-    Brush.Color = clActiveCaption
-  end
 end
