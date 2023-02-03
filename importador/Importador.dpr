@@ -1,14 +1,14 @@
-program HSoftPDV;
+program Importador;
 
 uses
   Vcl.Forms,
-  hsoftpdv.view.main in 'source\view\hsoftpdv.view.main.pas' {Main};
+  importador.view.main in 'importador.view.main.pas' {fMain};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TMain, Main);
+  Application.CreateForm(TfMain, fMain);
   Application.Run;
 end.
