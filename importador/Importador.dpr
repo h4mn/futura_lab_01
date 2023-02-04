@@ -2,7 +2,7 @@ program Importador;
 
 uses
   Vcl.Forms,
-  importador.view.main in 'importador.view.main.pas' {fMain};
+  importador.view.main in 'source\view\importador.view.main.pas' {fMain};
 
 {$R *.res}
 

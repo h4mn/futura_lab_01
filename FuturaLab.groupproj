@@ -6,6 +6,9 @@
         <Projects Include="curso_pdv\HSoftPDV.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="importador\Importador.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -23,14 +26,23 @@
     <Target Name="HSoftPDV:Make">
         <MSBuild Projects="curso_pdv\HSoftPDV.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Importador">
+        <MSBuild Projects="importador\Importador.dproj"/>
+    </Target>
+    <Target Name="Importador:Clean">
+        <MSBuild Projects="importador\Importador.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Importador:Make">
+        <MSBuild Projects="importador\Importador.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="HSoftPDV"/>
+        <CallTarget Targets="HSoftPDV;Importador"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="HSoftPDV:Clean"/>
+        <CallTarget Targets="HSoftPDV:Clean;Importador:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="HSoftPDV:Make"/>
+        <CallTarget Targets="HSoftPDV:Make;Importador:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
